@@ -3,33 +3,35 @@
 
 #include "encoder_substep.h"
 
+namespace encoder {
+
 class EncoderSubstep {
 public:
-    EncoderSubstep() = delete;
-    EncoderSubstep(EncoderSubstep& encoder) = delete;
+  EncoderSubstep() = delete;
+  EncoderSubstep(EncoderSubstep &encoder) = delete;
 
-    EncoderSubstep(const PIO pio, const uint sm, const uint pinA);
+  EncoderSubstep(const PIO pio, const uint sm, const uint pinA);
 
-    bool calibrate();
+  bool calibrate();
 
-    uint getStepCount();
+  uint getStepCount();
 
-    int getSpeed();
+  int getSpeed();
 
-    int getSpeed_2_20();
+  int getSpeed_2_20();
 
-    struct Data {
-        int speed_2_20;
-        int speed;
-        uint step;
-    };
+  struct Data {
+    int speed_2_20;
+    int speed;
+    uint step;
+  };
 
-    Data getAll();
+  Data getAll();
 
 private:
-    const uint m_pinA {};
-    substep_state_t m_substepState {};
-
+  const uint m_pinA{};
+  substep_state_t m_substepState{};
 };
+} // namespace encoder
 
 #endif // __ENCODER_SUBSTEP_HPP__
