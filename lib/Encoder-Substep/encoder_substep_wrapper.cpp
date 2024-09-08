@@ -2,8 +2,9 @@
 
 namespace encoder {
 
-EncoderSubstep::EncoderSubstep(const PIO pio, const uint sm, const uint pinA)
-    : m_pinA(pinA) {
+EncoderSubstep::EncoderSubstep(const PIO pio, const uint sm, const uint pinA,
+                               const uint stepsPerRev)
+    : m_pinA(pinA), m_stepsPerRev(stepsPerRev) {
   substep_init_state(pio, sm, m_pinA, &m_substepState);
   substep_set_calibration_data(&m_substepState, 64, 128, 192);
 }
@@ -35,6 +36,15 @@ int EncoderSubstep::getSpeed() {
 int EncoderSubstep::getSpeed_2_20() {
   substep_update(&m_substepState);
   return m_substepState.speed_2_20;
+}
+
+float EncoderSubstep::getRpm() {
+  const float encoder_speed_multiplier = 4.0f / (1000 * m_stepsPerRev);
+  return getSpeed() * encoder_speed_multiplier;
+}
+
+void EncoderSubstep::setStepsPerRev(uint stepsPerRev) {
+  m_stepsPerRev = stepsPerRev;
 }
 
 EncoderSubstep::Data EncoderSubstep::getAll() {
